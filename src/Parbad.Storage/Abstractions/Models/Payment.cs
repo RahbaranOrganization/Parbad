@@ -8,7 +8,7 @@ namespace Parbad.Storage.Abstractions.Models;
 [Serializable]
 public class Payment
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 
     public long TrackingNumber { get; set; }
 
@@ -31,4 +31,12 @@ public class Payment
     /// Determines whether this payment is successful or not.
     /// </summary>
     public bool IsPaid { get; set; }
+
+    //custom implementation
+    public Guid? UserId { get; set; }
+    public Guid EntityDefId { get; set; }
+    public Guid EntityId { get; set; }
+    public Guid PaymentGatewayId { get; set; }
+    public DateTime CreatedOn { get; set; }
+    public DateTime? UpdatedOn { get; set; }
 }

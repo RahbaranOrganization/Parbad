@@ -52,9 +52,9 @@ internal static class ZarinPalHelper
                                                            ZarinPalGatewayOptions gatewayOptions,
                                                            MessagesOptions messagesOptions)
     {
-        if (!IsSucceedCode(resultModel.Data.Code))
+        if (!IsSucceedCode(resultModel.Data?.Code))
         {
-            var message = ZarinPalCodeTranslator.Translate(resultModel.Data.Code, messagesOptions);
+            var message = ZarinPalCodeTranslator.Translate(resultModel.Errors!.Code, messagesOptions);
 
             return PaymentRequestResult.Failed(message, account.Name);
         }
@@ -244,9 +244,9 @@ internal static class ZarinPalHelper
         string message;
         int? errorCode = null;
 
-        if (failedResult?.Errors != null && failedResult.Errors.Any())
+        if (failedResult?.Errors != null)
         {
-            errorCode = failedResult.Errors.First().Code;
+            errorCode = failedResult.Errors.Code;
 
             message = ZarinPalCodeTranslator.Translate(errorCode.Value, messagesOptions);
         }
@@ -258,7 +258,7 @@ internal static class ZarinPalHelper
         return (errorCode, message);
     }
 
-    private static bool IsSucceedCode(int status) => status == NumericOkResult;
+    private static bool IsSucceedCode(int? status) => status == NumericOkResult;
 
     private static bool IsSucceedResult(string status) => string.Equals(status, "OK", StringComparison.OrdinalIgnoreCase);
 }

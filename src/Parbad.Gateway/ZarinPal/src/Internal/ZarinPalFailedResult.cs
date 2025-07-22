@@ -7,5 +7,5 @@ namespace Parbad.Gateway.ZarinPal.Internal;
 
 internal class ZarinPalFailedResult
 {
-    public List<ZarinPalErrorModel> Errors { get; set; }
+    public ZarinPalErrorModel Errors { get; set; }
 }

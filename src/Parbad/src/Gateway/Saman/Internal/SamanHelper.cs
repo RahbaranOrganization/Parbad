@@ -231,24 +231,17 @@ internal static class SamanHelper
             validationFailures.AppendLine($"ReceivedInvalidTerminalId: {callbackResponse.TerminalId}");
         }
 
-        if (string.IsNullOrWhiteSpace(callbackResponse.RefNum))
+        if (string.IsNullOrWhiteSpace(callbackResponse.ResNum))
         {
             isValid = false;
 
-            validationFailures.AppendLine($"{nameof(SamanCallbackResponse.RefNum)}{nullOrEmptyString}");
+            validationFailures.AppendLine($"{nameof(SamanCallbackResponse.ResNum)}{nullOrEmptyString}");
         }
         else if (callbackResponse.ResNum != invoiceContext.Payment.TrackingNumber.ToString())
         {
             isValid = false;
 
             validationFailures.AppendLine($"ReceivedInvalidTrackingNumber: {callbackResponse.RefNum}");
-        }
-
-        if (string.IsNullOrWhiteSpace(callbackResponse.ResNum))
-        {
-            isValid = false;
-
-            validationFailures.AppendLine($"{nameof(SamanCallbackResponse.ResNum)}{nullOrEmptyString}");
         }
 
         if (string.IsNullOrWhiteSpace(callbackResponse.Amount))

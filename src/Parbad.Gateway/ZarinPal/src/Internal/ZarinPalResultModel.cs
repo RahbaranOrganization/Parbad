@@ -7,7 +7,7 @@ namespace Parbad.Gateway.ZarinPal.Internal;
 
 internal class ZarinPalResultModel<TData> where TData : class
 {
-    public TData Data { get; set; }
+    public TData? Data { get; set; }
 
-    public List<ZarinPalErrorModel> Errors { get; set; }
+    public ZarinPalErrorModel? Errors { get; set; }
 }

@@ -47,4 +47,10 @@ public class Invoice
     /// Gets or sets the properties of the invoice.
     /// </summary>
     public IDictionary<string, object> Properties { get; set; } = new Dictionary<string, object>();
+
+    //custom implementation
+    public Guid EntityId { get; set; }
+    public Guid EntityDefId { get; set; }
+    public Guid PaymentGatewayId { get; set; }
+    public Guid? UserId { get; set; }
 }

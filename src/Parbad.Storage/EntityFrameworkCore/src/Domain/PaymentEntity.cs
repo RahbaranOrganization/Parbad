@@ -8,7 +8,7 @@ namespace Parbad.Storage.EntityFrameworkCore.Domain;
 
 public class PaymentEntity
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 
     public long TrackingNumber { get; set; }
 

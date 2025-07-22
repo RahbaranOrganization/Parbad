@@ -10,6 +10,4 @@ internal class ZarinPalRequestResultModelData
     public string Authority { set; get; }
 
     public int Code { set; get; }
-
-    public string PaymentUrl { set; get; }
 }

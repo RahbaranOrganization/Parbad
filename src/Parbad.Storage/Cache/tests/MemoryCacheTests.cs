@@ -15,8 +15,11 @@ public class MemoryCacheTests
     private ServiceProvider _services;
     private MemoryCacheStorage _storage;
 
+    private static Guid PaymentId => Guid.NewGuid();
+    private static Guid PaymentTransactionId => Guid.NewGuid();
     private static Payment PaymentTestData => new Payment
                                               {
+                                                  Id = PaymentId,
                                                   TrackingNumber = 1,
                                                   Amount = 1000,
                                                   Token = "token",
@@ -29,6 +32,7 @@ public class MemoryCacheTests
 
     private static Transaction TransactionTestData => new Transaction
                                                       {
+                                                          Id = PaymentTransactionId,
                                                           PaymentId = 1,
                                                           Amount = 1000,
                                                           IsSucceed = false,
@@ -67,7 +71,7 @@ public class MemoryCacheTests
         Assert.IsNotNull(payment);
         Assert.AreEqual(1, _storage.Payments.Count());
 
-        Assert.AreEqual(1, payment.Id);
+        Assert.AreEqual(PaymentId, payment.Id);
         Assert.AreEqual(PaymentTestData.TrackingNumber, payment.TrackingNumber);
         Assert.AreEqual(PaymentTestData.Amount, payment.Amount);
         Assert.AreEqual(PaymentTestData.TransactionCode, payment.TransactionCode);
@@ -138,7 +142,7 @@ public class MemoryCacheTests
         Assert.AreEqual(1, _storage.Transactions.Count());
 
         Assert.AreEqual(1, transaction.Id);
-        Assert.AreEqual(payment.Id, transaction.PaymentId);
+        Assert.AreEqual(PaymentTransactionId, transaction.PaymentId);
         Assert.AreEqual(TransactionTestData.Amount, transaction.Amount);
         Assert.AreEqual(TransactionTestData.AdditionalData, transaction.AdditionalData);
         Assert.AreEqual(TransactionTestData.IsSucceed, transaction.IsSucceed);
@@ -172,7 +176,7 @@ public class MemoryCacheTests
         Assert.AreEqual(1, _storage.Transactions.Count());
 
         Assert.AreEqual(1, transaction.Id);
-        Assert.AreEqual(transaction.Id, newTransaction.PaymentId);
+        Assert.AreEqual(PaymentTransactionId, newTransaction.PaymentId);
         Assert.AreEqual(transaction.Amount, newTransaction.Amount);
         Assert.AreEqual(transaction.AdditionalData, newTransaction.AdditionalData);
         Assert.AreEqual(transaction.IsSucceed, newTransaction.IsSucceed);

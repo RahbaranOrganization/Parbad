@@ -17,8 +17,11 @@ namespace Parbad.Storage.EntityFrameworkCore.Tests
         private ParbadDataContext _context;
         private EntityFrameworkCoreStorage _storage;
 
+        private static Guid PaymentId => Guid.NewGuid();
+        private static Guid PaymentTransactionId => Guid.NewGuid();
         private static readonly Payment PaymentTestData = new()
                                                           {
+                                                              Id = PaymentId,
                                                               TrackingNumber = 1,
                                                               Amount = 1000,
                                                               Token = "token",
@@ -31,7 +34,8 @@ namespace Parbad.Storage.EntityFrameworkCore.Tests
 
         private static readonly Transaction TransactionTestData = new()
                                                                   {
-                                                                      PaymentId = 1,
+                                                                      Id = PaymentTransactionId,
+                                                                      PaymentId = PaymentId,
                                                                       Amount = 1000,
                                                                       IsSucceed = false,
                                                                       Message = "test",
