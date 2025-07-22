@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Parbad.Internal;
+using System.ComponentModel;
 
 namespace Parbad.Http
 {
@@ -43,7 +44,7 @@ namespace Parbad.Http
 
             if (result.Exists)
             {
-                value = (T)Convert.ChangeType((string)result.Value, typeof(T));
+                value = (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(result.Value.ToString());;
             }
 
             return (result.Exists, value);

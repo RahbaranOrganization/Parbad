@@ -34,6 +34,18 @@ namespace Parbad
         public static IInvoiceBuilder SetAmount(this IInvoiceBuilder builder, Money amount)
             => AddFormatter(builder, invoice => invoice.Amount = amount);
 
+        public static IInvoiceBuilder SetUserId(this IInvoiceBuilder builder, Guid? userId)
+            => AddFormatter(builder, invoice => invoice.UserId = userId);
+
+        public static IInvoiceBuilder SetPaymentGatewayId(this IInvoiceBuilder builder, Guid bankId)
+            => AddFormatter(builder, invoice => invoice.PaymentGatewayId = bankId);
+
+        public static IInvoiceBuilder SetEntityId(this IInvoiceBuilder builder, Guid entityId)
+            => AddFormatter(builder, invoice => invoice.EntityId = entityId);
+
+        public static IInvoiceBuilder SetEntityDefId(this IInvoiceBuilder builder, Guid entityDefId)
+            => AddFormatter(builder, invoice => invoice.EntityDefId = entityDefId);
+
         /// <summary>
         /// Sets the callback URL. It will be used by the gateway for redirecting the
         /// client again to your website.

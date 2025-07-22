@@ -18,6 +18,8 @@ using Parbad.GatewayBuilders;
 using Parbad.Internal;
 using Parbad.Net;
 using Parbad.Options;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace Parbad.Gateway.ZarinPal;
 
@@ -194,9 +196,23 @@ public class ZarinPalGateway : GatewayBase<ZarinPalGatewayAccount>
 
     private static async Task<T> ReadFromJsonAsync<T>(HttpResponseMessage httpResponseMessage) where T : class
     {
-        var json = await httpResponseMessage.Content.ReadAsStringAsync();
+        var json = JObject.Parse(await httpResponseMessage.Content.ReadAsStringAsync());
+			
+        if (json.TryGetValue("data", out var data) && data is JArray dataArray && !dataArray.Any())
+        {
+            json.Remove("data");
+        }
 
-        return JsonConvert.DeserializeObject<T>(json);
+        if (json.TryGetValue("errors", out var errors) && errors is JArray errorsArray && !errorsArray.Any())
+        {
+            json.Remove("errors");
+        }
+
+        return  JsonConvert.DeserializeObject<T>(json.ToString(),
+            new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
     }
 
     private async Task Log(HttpResponseMessage responseMessage)

@@ -8,7 +8,7 @@ namespace Parbad.Storage.EntityFrameworkCore.Domain;
 
 public class TransactionEntity
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 
     public decimal Amount { get; set; }
 
@@ -20,7 +20,7 @@ public class TransactionEntity
 
     public string AdditionalData { get; set; }
 
-    public long PaymentId { get; set; }
+    public Guid PaymentId { get; set; }
 
     public DateTime CreatedOn { get; set; }
 

@@ -32,9 +32,7 @@ public abstract class CacheStorage : IStorage
     {
         if (payment == null) throw new ArgumentNullException(nameof(payment));
         cancellationToken.ThrowIfCancellationRequested();
-
-        payment.Id = GenerateNewPaymentId();
-
+        
         var record = FindPayment(payment);
 
         if (record != null) throw new InvalidOperationException($"There is already a payment record in database with id {payment.Id}");
@@ -83,8 +81,6 @@ public abstract class CacheStorage : IStorage
     {
         if (transaction == null) throw new ArgumentNullException(nameof(transaction));
         cancellationToken.ThrowIfCancellationRequested();
-
-        transaction.Id = GenerateNewTransactionId();
 
         var record = FindTransaction(transaction);
 
@@ -200,21 +196,17 @@ public abstract class CacheStorage : IStorage
     /// <summary>
     /// Generates a unique id for a new payment record.
     /// </summary>
-    protected virtual long GenerateNewPaymentId()
+    protected virtual Guid GenerateNewPaymentId()
     {
-        return Collection.Payments.Count == 0
-            ? 1
-            : Collection.Payments.Max(model => model.Id) + 1;
+        return Guid.NewGuid();
     }
 
     /// <summary>
     /// Generates a unique id for a new transaction record.
     /// </summary>
-    protected virtual long GenerateNewTransactionId()
+    protected virtual Guid GenerateNewTransactionId()
     {
-        return Collection.Transactions.Count == 0
-            ? 1
-            : Collection.Transactions.Max(model => model.Id) + 1;
+        return Guid.NewGuid();
     }
 
     /// <summary>

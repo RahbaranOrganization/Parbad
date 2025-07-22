@@ -98,7 +98,11 @@ namespace Parbad.Internal
                 IsCompleted = false,
                 IsPaid = false,
                 Token = paymentToken,
-                GatewayName = gateway.GetRoutingGatewayName()
+                GatewayName = gateway.GetRoutingGatewayName(),
+                UserId = invoice.UserId,
+                PaymentGatewayId = invoice.PaymentGatewayId,
+                EntityId = invoice.EntityId,
+                EntityDefId = invoice.EntityDefId,
             };
 
             await _storageManager.CreatePaymentAsync(newPayment, cancellationToken).ConfigureAwaitFalse();

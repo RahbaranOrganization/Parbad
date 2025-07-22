@@ -8,7 +8,7 @@ namespace Parbad.Storage.Abstractions.Models;
 [Serializable]
 public class Transaction
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 
     public decimal Amount { get; set; }
 
@@ -20,5 +20,11 @@ public class Transaction
 
     public string AdditionalData { get; set; }
 
-    public long PaymentId { get; set; }
+    public string? ClientIp { get; set; }   
+        
+    public DateTime CreatedOn { get; set; }
+        
+    public DateTime? UpdatedOn { get; set; }
+        
+    public Guid PaymentId { get; set; }
 }

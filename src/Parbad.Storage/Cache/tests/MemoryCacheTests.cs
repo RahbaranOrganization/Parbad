@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -15,8 +16,11 @@ public class MemoryCacheTests
     private ServiceProvider _services;
     private MemoryCacheStorage _storage;
 
+    private static Guid PaymentId => Guid.NewGuid();
+    private static Guid PaymentTransactionId => Guid.NewGuid();
     private static Payment PaymentTestData => new Payment
                                               {
+                                                  Id = PaymentId,
                                                   TrackingNumber = 1,
                                                   Amount = 1000,
                                                   Token = "token",
@@ -29,7 +33,8 @@ public class MemoryCacheTests
 
     private static Transaction TransactionTestData => new Transaction
                                                       {
-                                                          PaymentId = 1,
+                                                          Id = PaymentTransactionId,
+                                                          PaymentId = PaymentId,
                                                           Amount = 1000,
                                                           IsSucceed = false,
                                                           Message = "test",
@@ -67,7 +72,7 @@ public class MemoryCacheTests
         Assert.IsNotNull(payment);
         Assert.AreEqual(1, _storage.Payments.Count());
 
-        Assert.AreEqual(1, payment.Id);
+        Assert.AreEqual(PaymentId, payment.Id);
         Assert.AreEqual(PaymentTestData.TrackingNumber, payment.TrackingNumber);
         Assert.AreEqual(PaymentTestData.Amount, payment.Amount);
         Assert.AreEqual(PaymentTestData.TransactionCode, payment.TransactionCode);
@@ -98,7 +103,7 @@ public class MemoryCacheTests
         var newPayment = _storage.Payments.SingleOrDefault();
 
         Assert.IsNotNull(newPayment);
-        Assert.AreEqual(1, newPayment.Id);
+        Assert.AreEqual(PaymentId, newPayment.Id);
         Assert.AreEqual(payment.TrackingNumber, newPayment.TrackingNumber);
         Assert.AreEqual(payment.Amount, newPayment.Amount);
         Assert.AreEqual(payment.TransactionCode, newPayment.TransactionCode);
@@ -137,8 +142,8 @@ public class MemoryCacheTests
         Assert.IsNotNull(transaction);
         Assert.AreEqual(1, _storage.Transactions.Count());
 
-        Assert.AreEqual(1, transaction.Id);
-        Assert.AreEqual(payment.Id, transaction.PaymentId);
+        Assert.AreEqual(PaymentId, transaction.Id);
+        Assert.AreEqual(PaymentTransactionId, transaction.PaymentId);
         Assert.AreEqual(TransactionTestData.Amount, transaction.Amount);
         Assert.AreEqual(TransactionTestData.AdditionalData, transaction.AdditionalData);
         Assert.AreEqual(TransactionTestData.IsSucceed, transaction.IsSucceed);
@@ -171,8 +176,8 @@ public class MemoryCacheTests
         Assert.IsNotNull(newTransaction);
         Assert.AreEqual(1, _storage.Transactions.Count());
 
-        Assert.AreEqual(1, transaction.Id);
-        Assert.AreEqual(transaction.Id, newTransaction.PaymentId);
+        Assert.AreEqual(PaymentId, transaction.Id);
+        Assert.AreEqual(PaymentTransactionId, newTransaction.PaymentId);
         Assert.AreEqual(transaction.Amount, newTransaction.Amount);
         Assert.AreEqual(transaction.AdditionalData, newTransaction.AdditionalData);
         Assert.AreEqual(transaction.IsSucceed, newTransaction.IsSucceed);
