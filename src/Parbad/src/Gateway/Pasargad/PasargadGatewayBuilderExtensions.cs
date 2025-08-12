@@ -26,8 +26,8 @@ public static class PasargadGatewayBuilderExtensions
               .WithHttpClient<PasargadApi>((serviceProvider, httpClient) =>
                                            {
                                                var gatewayOptions = serviceProvider.GetRequiredService<IOptions<PasargadGatewayOptions>>();
-                                               
-                                               httpClient.BaseAddress = new Uri(gatewayOptions.Value.ApiBaseUrl); 
+
+                                               httpClient.BaseAddress = new Uri(gatewayOptions.Value.ApiBaseUrl);
                                            })
               .WithOptions(options => { });
     }
