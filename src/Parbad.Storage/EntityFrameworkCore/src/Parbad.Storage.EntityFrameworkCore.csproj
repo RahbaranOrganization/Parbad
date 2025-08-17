@@ -45,7 +45,7 @@ More information: https://github.com/Sina-Soltani/Parbad</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.8" />
   </ItemGroup>
 
 </Project>
