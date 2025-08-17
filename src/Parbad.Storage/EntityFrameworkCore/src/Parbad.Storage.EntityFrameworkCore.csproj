@@ -4,7 +4,7 @@
     <PackageId>Parbad.Storage.EntityFrameworkCore</PackageId>
     <VersionPrefix>1.6.0</VersionPrefix>
     <LangVersion>latest</LangVersion>
-    <TargetFrameworks>net5;net6;net7;net8.0;net9.0</TargetFrameworks>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>  
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
