@@ -31,7 +31,8 @@ namespace Parbad.Gateway.Melli.Internal
                 invoice.Amount,
                 signedData,
                 invoice.CallbackUrl,
-                invoice.TrackingNumber);
+                invoice.TrackingNumber,
+                account.MultiplexingData);
         }
 
         public static PaymentRequestResult CreateRequestResult(
@@ -145,8 +146,22 @@ namespace Parbad.Gateway.Melli.Internal
             };
         }
 
-        private static object CreateRequestObject(string terminalId, string merchantId, long amount, string signedData, string callbackUrl, long orderId)
+        private static object CreateRequestObject(string terminalId, string merchantId, long amount, string signedData, string callbackUrl, long orderId, string multiplexingData)
         {
+            if (multiplexingData.IsNullOrEmpty())
+            {
+                return new
+                {
+                    TerminalId = terminalId,
+                    MerchantId = merchantId,
+                    Amount = amount,
+                    SignData = signedData,
+                    ReturnUrl = callbackUrl,
+                    LocalDateTime = DateTime.Now,
+                    OrderId = orderId.ToString()
+                };    
+            }
+            
             return new
             {
                 TerminalId = terminalId,
@@ -155,7 +170,8 @@ namespace Parbad.Gateway.Melli.Internal
                 SignData = signedData,
                 ReturnUrl = callbackUrl,
                 LocalDateTime = DateTime.Now,
-                OrderId = orderId.ToString()
+                OrderId = orderId.ToString(),
+                MultiplexingData =  multiplexingData
             };
         }
 

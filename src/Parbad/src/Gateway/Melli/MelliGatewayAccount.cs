@@ -15,5 +15,6 @@ namespace Parbad.Gateway.Melli
         public string MerchantId { get; set; }
 
         public string TerminalKey { get; set; }
+        public string MultiplexingData { get; set; }
     }
 }
