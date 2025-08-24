@@ -9,179 +9,196 @@ using Parbad.Http;
 using Parbad.Internal;
 using Parbad.Options;
 using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Parbad.Gateway.Melli.Internal
 {
-    internal static class MelliHelper
-    {
-        private const int SuccessCode = 0;
-        private const int DuplicateTrackingNumberCode = 1011;
+	internal static class MelliHelper
+	{
+		private const int SuccessCode = 0;
+		private const int DuplicateTrackingNumberCode = 1011;
 
-        public static object CreateRequestData(Invoice invoice, MelliGatewayAccount account, IMelliGatewayCrypto crypto)
-        {
-            var data = $"{account.TerminalId};{invoice.TrackingNumber};{(long)invoice.Amount}";
+		public static object CreateRequestData(Invoice invoice, MelliGatewayAccount account, IMelliGatewayCrypto crypto)
+		{
+			var data = $"{account.TerminalId};{invoice.TrackingNumber};{(long) invoice.Amount}";
 
-            var signedData = crypto.Encrypt(account.TerminalKey, data);
+			var signedData = crypto.Encrypt(account.TerminalKey, data);
 
-            return CreateRequestObject(
-                account.TerminalId,
-                account.MerchantId,
-                invoice.Amount,
-                signedData,
-                invoice.CallbackUrl,
-                invoice.TrackingNumber,
-                account.MultiplexingData);
-        }
+			return CreateRequestObject(
+				account.TerminalId,
+				account.MerchantId,
+				invoice.Amount,
+				signedData,
+				invoice.CallbackUrl,
+				invoice.TrackingNumber,
+				account.MultiplexingData);
+		}
 
-        public static PaymentRequestResult CreateRequestResult(
-            MelliApiRequestResult result,
-            HttpContext httpContext,
-            MelliGatewayAccount account,
-            MelliGatewayOptions gatewayOptions,
-            MessagesOptions messagesOptions)
-        {
-            if (result == null)
-            {
-                return PaymentRequestResult.Failed(messagesOptions.UnexpectedErrorText);
-            }
+		public static PaymentRequestResult CreateRequestResult(
+			MelliApiRequestResult result,
+			HttpContext httpContext,
+			MelliGatewayAccount account,
+			MelliGatewayOptions gatewayOptions,
+			MessagesOptions messagesOptions)
+		{
+			if (result == null)
+			{
+				return PaymentRequestResult.Failed(messagesOptions.UnexpectedErrorText);
+			}
 
-            var isSucceed = result.ResCode == SuccessCode;
+			var isSucceed = result.ResCode == SuccessCode;
 
-            if (!isSucceed)
-            {
-                string message;
+			if (!isSucceed)
+			{
+				string message;
 
-                if (result.ResCode == DuplicateTrackingNumberCode)
-                {
-                    message = messagesOptions.DuplicateTrackingNumber;
-                }
-                else
-                {
-                    message = !result.Description.IsNullOrEmpty()
-                        ? result.Description
-                        : MelliRequestResultTranslator.Translate(result.ResCode, messagesOptions);
-                }
+				if (result.ResCode == DuplicateTrackingNumberCode)
+				{
+					message = messagesOptions.DuplicateTrackingNumber;
+				}
+				else
+				{
+					message = !result.Description.IsNullOrEmpty()
+						? result.Description
+						: MelliRequestResultTranslator.Translate(result.ResCode, messagesOptions);
+				}
 
-                return PaymentRequestResult.Failed(message, account.Name);
-            }
+				return PaymentRequestResult.Failed(message, account.Name);
+			}
 
-            var paymentPageUrl = $"{gatewayOptions.PaymentPageUrl}?token={result.Token}";
+			var paymentPageUrl = $"{gatewayOptions.PaymentPageUrl}?token={result.Token}";
 
-            return PaymentRequestResult.SucceedWithRedirect(account.Name, httpContext, paymentPageUrl);
-        }
+			return PaymentRequestResult.SucceedWithRedirect(account.Name, httpContext, paymentPageUrl);
+		}
 
-        public static async Task<MelliCallbackResult> CreateCallbackResultAsync(
-            InvoiceContext context,
-            HttpRequest httpRequest,
-            MelliGatewayAccount account,
-            IMelliGatewayCrypto crypto,
-            MessagesOptions messagesOptions,
-            CancellationToken cancellationToken)
-        {
-            var apiResponseCode = await httpRequest.TryGetParamAsAsync<int>("ResCode", cancellationToken).ConfigureAwaitFalse();
+		public static async Task<MelliCallbackResult> CreateCallbackResultAsync(
+			InvoiceContext context,
+			HttpRequest httpRequest,
+			MelliGatewayAccount account,
+			IMelliGatewayCrypto crypto,
+			MessagesOptions messagesOptions,
+			CancellationToken cancellationToken)
+		{
+			var apiResponseCode = await httpRequest.TryGetParamAsAsync<int>("ResCode", cancellationToken)
+				.ConfigureAwaitFalse();
 
-            if (!apiResponseCode.Exists || apiResponseCode.Value != SuccessCode)
-            {
-                return new MelliCallbackResult
-                {
-                    IsSucceed = false,
-                    Message = messagesOptions.PaymentFailed
-                };
-            }
+			if (!apiResponseCode.Exists || apiResponseCode.Value != SuccessCode)
+			{
+				return new MelliCallbackResult
+				{
+					IsSucceed = false,
+					Message = messagesOptions.PaymentFailed
+				};
+			}
 
-            var apiToken = await httpRequest.TryGetParamAsync("Token", cancellationToken).ConfigureAwaitFalse();
-            var apiOrderId = await httpRequest.TryGetParamAsAsync<long>("OrderId", cancellationToken).ConfigureAwaitFalse();
+			var apiToken = await httpRequest.TryGetParamAsync("Token", cancellationToken).ConfigureAwaitFalse();
+			var apiOrderId = await httpRequest.TryGetParamAsAsync<long>("OrderId", cancellationToken)
+				.ConfigureAwaitFalse();
 
-            if (!apiOrderId.Exists || apiOrderId.Value != context.Payment.TrackingNumber)
-            {
-                return new MelliCallbackResult
-                {
-                    IsSucceed = false,
-                    Token = apiToken.Value,
-                    Message = messagesOptions.InvalidDataReceivedFromGateway
-                };
-            }
+			if (!apiOrderId.Exists || apiOrderId.Value != context.Payment.TrackingNumber)
+			{
+				return new MelliCallbackResult
+				{
+					IsSucceed = false,
+					Token = apiToken.Value,
+					Message = messagesOptions.InvalidDataReceivedFromGateway
+				};
+			}
 
-            var signedData = crypto.Encrypt(account.TerminalKey, apiToken.Value);
+			var signedData = crypto.Encrypt(account.TerminalKey, apiToken.Value);
 
-            var dataToVerify = CreateVerifyObject(apiToken.Value, signedData);
+			var dataToVerify = CreateVerifyObject(apiToken.Value, signedData);
 
-            return new MelliCallbackResult
-            {
-                IsSucceed = true,
-                Token = apiToken.Value,
-                JsonDataToVerify = dataToVerify
-            };
-        }
+			return new MelliCallbackResult
+			{
+				IsSucceed = true,
+				Token = apiToken.Value,
+				JsonDataToVerify = dataToVerify
+			};
+		}
 
-        public static PaymentVerifyResult CreateVerifyResult(MelliApiVerifyResult result, MessagesOptions messagesOptions)
-        {
-            if (result == null)
-            {
-                return PaymentVerifyResult.Failed(messagesOptions.UnexpectedErrorText);
-            }
+		public static PaymentVerifyResult CreateVerifyResult(MelliApiVerifyResult result,
+			MessagesOptions messagesOptions)
+		{
+			if (result == null)
+			{
+				return PaymentVerifyResult.Failed(messagesOptions.UnexpectedErrorText);
+			}
 
-            string message;
+			string message;
 
-            if (!result.Description.IsNullOrEmpty())
-            {
-                message = result.Description;
-            }
-            else
-            {
-                message = MelliVerifyResultTranslator.Translate(result.ResCode, messagesOptions);
-            }
+			if (!result.Description.IsNullOrEmpty())
+			{
+				message = result.Description;
+			}
+			else
+			{
+				message = MelliVerifyResultTranslator.Translate(result.ResCode, messagesOptions);
+			}
 
-            var status = result.ResCode == SuccessCode
-                ? PaymentVerifyResultStatus.Succeed
-                : PaymentVerifyResultStatus.Failed;
+			var status = result.ResCode == SuccessCode
+				? PaymentVerifyResultStatus.Succeed
+				: PaymentVerifyResultStatus.Failed;
 
-            return new PaymentVerifyResult
-            {
-                Status = status,
-                TransactionCode = result.RetrivalRefNo,
-                Message = message
-            };
-        }
+			return new PaymentVerifyResult
+			{
+				Status = status,
+				TransactionCode = result.RetrivalRefNo,
+				Message = message
+			};
+		}
 
-        private static object CreateRequestObject(string terminalId, string merchantId, long amount, string signedData, string callbackUrl, long orderId, string multiplexingData)
-        {
-            if (multiplexingData.IsNullOrEmpty())
-            {
-                return new
-                {
-                    TerminalId = terminalId,
-                    MerchantId = merchantId,
-                    Amount = amount,
-                    SignData = signedData,
-                    ReturnUrl = callbackUrl,
-                    LocalDateTime = DateTime.Now,
-                    OrderId = orderId.ToString()
-                };    
-            }
-            
-            return new
-            {
-                TerminalId = terminalId,
-                MerchantId = merchantId,
-                Amount = amount,
-                SignData = signedData,
-                ReturnUrl = callbackUrl,
-                LocalDateTime = DateTime.Now,
-                OrderId = orderId.ToString(),
-                MultiplexingData =  multiplexingData
-            };
-        }
+		private static object CreateRequestObject(string terminalId,
+			string merchantId,
+			long amount,
+			string signedData,
+			string callbackUrl,
+			long orderId,
+			string multiplexingData)
+		{
+			if (multiplexingData.IsNullOrEmpty())
+			{
+				return new
+				{
+					TerminalId = terminalId,
+					MerchantId = merchantId,
+					Amount = amount,
+					SignData = signedData,
+					ReturnUrl = callbackUrl,
+					LocalDateTime = DateTime.Now,
+					OrderId = orderId.ToString()
+				};
+			}
 
-        private static object CreateVerifyObject(string apiToken, string signedData)
-        {
-            return new
-            {
-                token = apiToken,
-                SignData = signedData
-            };
-        }
-    }
+			return new
+			{
+				TerminalId = terminalId,
+				MerchantId = merchantId,
+				Amount = amount,
+				SignData = signedData,
+				ReturnUrl = callbackUrl,
+				LocalDateTime = DateTime.Now,
+				OrderId = orderId.ToString(),
+				JsonSerializer.Deserialize<Tashim>("{" + multiplexingData + "}").MultiplexingData
+			};
+		}
+
+		private static object CreateVerifyObject(string apiToken, string signedData)
+		{
+			return new
+			{
+				token = apiToken,
+				SignData = signedData
+			};
+		}
+	}
 }
+
+public record Tashim(MultiplexingDataModel MultiplexingData);
+
+public record MultiplexingDataModel(string Type, List<MultiplexingRow> MultiplexingRows);
+
+public record MultiplexingRow(string IbanNumber, decimal Value);
