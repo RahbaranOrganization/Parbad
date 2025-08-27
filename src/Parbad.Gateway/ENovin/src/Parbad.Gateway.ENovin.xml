@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Parbad.Gateway.ENovin</name>
+    </assembly>
+    <members>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGateway.RequestAsync(Parbad.Abstraction.Invoice,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGateway.FetchAsync(Parbad.InvoiceContext,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGateway.VerifyAsync(Parbad.InvoiceContext,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGateway.RefundAsync(Parbad.InvoiceContext,Parbad.Money,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGatewayBuilderExtensions.AddENovin(Parbad.GatewayBuilders.IGatewayBuilder)">
+            <summary>
+            Adds ENovin gateway to Parbad services.
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGatewayBuilderExtensions.WithAccounts(Parbad.GatewayBuilders.IGatewayConfigurationBuilder{Parbad.Gateway.ENovin.ENovinGateway},System.Action{Parbad.GatewayBuilders.IGatewayAccountBuilder{Parbad.Gateway.ENovin.ENovinGatewayAccount}})">
+            <summary>
+            Configures the accounts for <see cref="T:Parbad.Gateway.ENovin.ENovinGateway"/>.
+            </summary>
+            <param name="builder"></param>
+            <param name="configureAccounts">Configures the accounts.</param>
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGatewayBuilderExtensions.WithOptions(Parbad.GatewayBuilders.IGatewayConfigurationBuilder{Parbad.Gateway.ENovin.ENovinGateway},System.Action{Parbad.Gateway.ENovin.ENovinGatewayOptions})">
+            <summary>
+            Configures the options for ENovin Gateway.
+            </summary>
+            <param name="builder"></param>
+            <param name="configureOptions">Configuration</param>
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGatewayInvoiceBuilderExtensions.UseENovin(Parbad.InvoiceBuilder.IInvoiceBuilder)">
+            <summary>
+            The invoice will be sent to ENovin gateway.
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinGatewayInvoiceBuilderExtensions.SetENovinData(Parbad.InvoiceBuilder.IInvoiceBuilder,System.String)">
+            <summary>
+            Sets additional data which will be sent to ENovin Gateway.
+            </summary>
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinPaymentResultExtensions.GetENovinAdditionalData(Parbad.IPaymentFetchResult)">
+            <summary>
+            Gets the additional data which is received from ENovin Gateway. 
+            </summary>
+        </member>
+        <member name="M:Parbad.Gateway.ENovin.ENovinPaymentResultExtensions.GetENovinAdditionalData(Parbad.IPaymentVerifyResult)">
+            <summary>
+            Gets the additional data which is received from ENovin Gateway. 
+            </summary>
+        </member>
+    </members>
+</doc>
