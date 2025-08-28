@@ -49,10 +49,6 @@ public class ENovinGateway : GatewayBase<ENovinGatewayAccount>
 
 		var tokenRequestModel = ENovinHelper.CreateTokenRequestModel(invoice, account);
 
-		var responseModel = await _httpClient.PostJsonAsync<ENovinTokenResponse>(_gatewayOptions.ApiTokenUrl,
-			tokenRequestModel,
-			cancellationToken: cancellationToken);
-
 		var jsonSettings = new JsonSerializerSettings
 		{
 			Converters = { new StringEnumConverter() }
