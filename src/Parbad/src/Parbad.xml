@@ -863,6 +863,11 @@
             پرداخت ناموفق
             </summary>
         </member>
+        <member name="F:Parbad.Gateway.Pasargad.Internal.Models.PasargadCallbackResultStatus.Cancel">
+            <summary>
+            لغو شده
+            </summary>
+        </member>
         <member name="F:Parbad.Gateway.Pasargad.Internal.Models.PasargadCallbackResultStatus.Unknown">
             <summary>
             نامشخص

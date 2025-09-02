@@ -37,6 +37,11 @@ internal enum PasargadCallbackResultStatus
     /// پرداخت ناموفق
     /// </summary>
     Failed,
+    
+    /// <summary>
+    /// لغو شده
+    /// </summary>
+    Cancel,
 
     /// <summary>
     /// نامشخص
