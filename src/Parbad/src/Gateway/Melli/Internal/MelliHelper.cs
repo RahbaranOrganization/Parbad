@@ -159,7 +159,7 @@ namespace Parbad.Gateway.Melli.Internal
 			long orderId,
 			string multiplexingData)
 		{
-			if (multiplexingData.IsNullOrEmpty())
+			if (multiplexingData.IsNullOrWhiteSpace())
 			{
 				return new
 				{
