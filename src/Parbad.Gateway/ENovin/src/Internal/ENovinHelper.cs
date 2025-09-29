@@ -21,7 +21,7 @@ namespace Parbad.Gateway.ENovin.Internal;
 internal static class ENovinHelper
 {
 	private const string RefNumKey = nameof(RefNumKey);
-	private const string CallbackSuccessCode = "2";
+	private const string CallbackSuccessCode = "0";
 	private const int VerificationSuccessCode = 0;
 	public const string AdditionalVerificationDataKey = "ENovinAdditionalVerificationData";
 	public const string CellNumberPropertyKey = "ENovinCellNumber";
@@ -47,21 +47,11 @@ internal static class ENovinHelper
 		ENovinGatewayOptions gatewayOptions,
 		MessagesOptions messagesOptions)
 	{
-		if (tokenResponse.Status == 1)
+		if (tokenResponse.Status == 0)
 		{
-			var form = new Dictionary<string, string>
-			{
-				{
-					"Token", tokenResponse.Token
-				},
-				{
-					"GetMethod", "false"
-				}
-			};
-
-			return PaymentRequestResult.SucceedWithPost(account.Name, httpContext, gatewayOptions.PaymentPageUrl, form);
+			return PaymentRequestResult.SucceedWithRedirect(account.Name, httpContext, string.Format(gatewayOptions.PaymentPageUrl, tokenResponse.Token));
 		}
-
+		
 		var message = string.IsNullOrWhiteSpace(tokenResponse.ErrorDesc)
 			? ENovinResultTranslator.Translate(tokenResponse.ErrorCode, messagesOptions)
 			: tokenResponse.ErrorDesc;
@@ -130,21 +120,15 @@ internal static class ENovinHelper
 		InvoiceContext invoiceContext,
 		MessagesOptions messagesOptions)
 	{
-		var isSuccess = verificationResponse.TransactionDetail.TerminalNumber == gatewayAccount.TerminalId &&
-						verificationResponse.TransactionDetail.AffectiveAmount ==
-						(long) invoiceContext.Payment.Amount &&
-						verificationResponse.TransactionDetail.Rrn == callbackResponse.Rrn &&
-						verificationResponse.ResultCode == VerificationSuccessCode;
-
-		var message = isSuccess
+		var message = verificationResponse.IsSuccess
 			? messagesOptions.PaymentSucceed
-			: ENovinResultTranslator.Translate(verificationResponse.ResultCode.ToString(), messagesOptions);
+			: ENovinResultTranslator.Translate(verificationResponse.Status, messagesOptions);
 
 		var result = new PaymentVerifyResult
 		{
-			Status = isSuccess ? PaymentVerifyResultStatus.Succeed : PaymentVerifyResultStatus.Failed,
-			TransactionCode = verificationResponse.TransactionDetail.Rrn,
-			GatewayResponseCode = verificationResponse.ResultCode.ToString(),
+			Status = verificationResponse.IsSuccess ? PaymentVerifyResultStatus.Succeed : PaymentVerifyResultStatus.Failed,
+			TransactionCode = verificationResponse.RRN,
+			GatewayResponseCode = verificationResponse.Status,
 			Message = message
 		};
 
@@ -179,8 +163,8 @@ internal static class ENovinHelper
 	{
 		return new PaymentRefundResult
 		{
-			Status = response.Success ? PaymentRefundResultStatus.Succeed : PaymentRefundResultStatus.Failed,
-			GatewayResponseCode = response.ResultCode.ToString()
+			Status = response.IsSuccess ? PaymentRefundResultStatus.Succeed : PaymentRefundResultStatus.Failed,
+			GatewayResponseCode = response.Status
 		};
 	}
 

@@ -7,7 +7,7 @@ public class ENovinGatewayOptions
 {
     public string ApiTokenUrl { get; set; } = "https://pna.shaparak.ir/mhipg/api/Payment/NormalSale";
 
-    public string PaymentPageUrl { get; set; } = "https://pna.shaparak.ir/mhui/home/index";
+    public string PaymentPageUrl { get; set; } = "https://pna.shaparak.ir/mhui/home/index/{0}";
 
     public string ApiVerificationUrl { get; set; } = "https://pna.shaparak.ir/mhipg/api/Payment/confirm";
 
