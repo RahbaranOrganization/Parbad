@@ -2051,7 +2051,7 @@
         </member>
         <member name="P:Parbad.Properties.Resources.OptionValueRequired">
             <summary>
-              Looks up a localized string similar to Gateway configuration failed. {0} is required..
+              Looks up a localized string similar to Gateway configuration failed. [{0}] is required..
             </summary>
         </member>
         <member name="P:Parbad.Properties.Resources.RefundNotSupports">
