@@ -30,6 +30,11 @@ public class PasargadPurchaseRequestModel
     /// مبلغ به ریال
     /// </summary>
     public decimal Amount { get; set; }
+    
+    /// <summary>
+    /// کد شناسه دار
+    /// </summary>
+    public string? PaymentCode { get; set; }
 
     /// <summary>
     /// کد سرویس که برای خرید باید مقدار ثابت 8 ارسال شود

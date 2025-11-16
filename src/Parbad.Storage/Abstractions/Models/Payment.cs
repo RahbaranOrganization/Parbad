@@ -13,6 +13,8 @@ public class Payment
     public long TrackingNumber { get; set; }
 
     public decimal Amount { get; set; }
+    
+    public string? PaymentCode { get; set; }
 
     public string Token { get; set; }
 

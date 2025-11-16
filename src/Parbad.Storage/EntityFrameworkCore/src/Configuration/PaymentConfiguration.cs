@@ -37,6 +37,11 @@ public class PaymentConfiguration : EntityTypeConfiguration<PaymentEntity>
                .IsRequired(required: true);
         builder.HasIndex(entity => entity.TrackingNumber).IsUnique(unique: true);
 
+        builder.Property(entity => entity.PaymentCode)
+               .HasColumnName("payment_code")
+               .HasMaxLength(50)
+               .IsRequired(required: false);
+
         builder.Property(entity => entity.Token)
                .HasColumnName(nameof(PaymentEntity.Token).ToLower())
                .IsRequired(required: true);

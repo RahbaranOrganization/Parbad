@@ -65,6 +65,7 @@ public class PasargadGateway : GatewayBase<PasargadGatewayAccount>
                                                               Invoice = invoice.TrackingNumber.ToString(),
                                                               InvoiceDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
                                                               Amount = invoice.Amount,
+                                                              PaymentCode = invoice.PaymentCode,
                                                               CallbackApi = invoice.CallbackUrl,
                                                               Description = additionalData?.Description,
                                                               NationalCode = additionalData?.NationalCode,

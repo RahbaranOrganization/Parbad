@@ -95,6 +95,7 @@ namespace Parbad.Internal
             {
                 TrackingNumber = invoice.TrackingNumber,
                 Amount = invoice.Amount,
+                PaymentCode = invoice.PaymentCode,
                 IsCompleted = false,
                 IsPaid = false,
                 Token = paymentToken,

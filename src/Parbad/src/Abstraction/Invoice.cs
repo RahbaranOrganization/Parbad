@@ -31,6 +31,11 @@ public class Invoice
     /// <para>decimal a = invoice.Amount;</para>
     /// </summary>
     public Money Amount { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the payment code associated with the invoice.
+    /// </summary>
+    public string PaymentCode { get; set; }
 
     /// <summary>
     /// A complete URL of your website. It will be used by the gateway for redirecting

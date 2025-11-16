@@ -34,6 +34,9 @@ namespace Parbad
         public static IInvoiceBuilder SetAmount(this IInvoiceBuilder builder, Money amount)
             => AddFormatter(builder, invoice => invoice.Amount = amount);
 
+        public static IInvoiceBuilder SetPaymentCode(this IInvoiceBuilder builder, string paymentCode)
+            => AddFormatter(builder, invoice => invoice.PaymentCode = paymentCode);
+
         public static IInvoiceBuilder SetUserId(this IInvoiceBuilder builder, Guid? userId)
             => AddFormatter(builder, invoice => invoice.UserId = userId);
 

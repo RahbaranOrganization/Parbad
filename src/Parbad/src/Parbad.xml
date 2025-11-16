@@ -130,6 +130,11 @@
             <para>decimal a = invoice.Amount;</para>
             </summary>
         </member>
+        <member name="P:Parbad.Abstraction.Invoice.PaymentCode">
+            <summary>
+            Gets or sets the payment code associated with the invoice.
+            </summary>
+        </member>
         <member name="P:Parbad.Abstraction.Invoice.CallbackUrl">
             <summary>
             A complete URL of your website. It will be used by the gateway for redirecting
@@ -771,6 +776,11 @@
         <member name="P:Parbad.Gateway.Pasargad.Api.Models.PasargadPurchaseRequestModel.Amount">
             <summary>
             مبلغ به ریال
+            </summary>
+        </member>
+        <member name="P:Parbad.Gateway.Pasargad.Api.Models.PasargadPurchaseRequestModel.PaymentCode">
+            <summary>
+            کد شناسه دار
             </summary>
         </member>
         <member name="P:Parbad.Gateway.Pasargad.Api.Models.PasargadPurchaseRequestModel.ServiceCode">
