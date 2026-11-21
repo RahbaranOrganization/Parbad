@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>Parbad.Gateway.ENovin</PackageId>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <VersionPrefix>1.4.0</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <Authors>Mohammad Mokhtari</Authors>

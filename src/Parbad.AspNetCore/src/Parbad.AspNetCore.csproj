@@ -4,7 +4,7 @@
     <PackageId>Parbad.AspNetCore</PackageId>
     <Product>Parbad.AspNetCore</Product>
     <VersionPrefix>1.5.0</VersionPrefix>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Authors>Sina Soltani</Authors>
     <Copyright>Copyright © Sina Soltani 2016</Copyright>

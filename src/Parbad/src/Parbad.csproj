@@ -4,7 +4,7 @@
     <PackageId>Parbad</PackageId>
     <Product>Parbad</Product>
     <VersionPrefix>3.11.3</VersionPrefix>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Authors>Parbad Sina Soltani</Authors>
     <Description>Parbad is a free, open-source, integrated and extensible library which connects your web applications to online payment gateways. Gateways can be added or developed by you.
@@ -39,7 +39,7 @@ More information: https://github.com/Sina-Soltani/Parbad
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup >
@@ -82,8 +82,8 @@ More information: https://github.com/Sina-Soltani/Parbad
   </ItemGroup>
 
   <ItemGroup >
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.13" />
   </ItemGroup>
 
   <Import Project="..\..\Parbad.Shared\Parbad.Shared.projitems" Label="Shared" />

@@ -3,7 +3,7 @@
     <PackageId>Parbad.Gateway.PayPing</PackageId>
     <Product>Parbad.Gateway.PayPing</Product>
     <VersionPrefix>1.5.0</VersionPrefix>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Authors>Ali Zaferany</Authors>
     <Copyright>Copyright © Parbad 2016</Copyright>

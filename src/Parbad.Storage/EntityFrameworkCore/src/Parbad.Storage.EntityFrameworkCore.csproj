@@ -4,7 +4,7 @@
     <PackageId>Parbad.Storage.EntityFrameworkCore</PackageId>
     <VersionPrefix>1.6.0</VersionPrefix>
     <LangVersion>latest</LangVersion>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>  
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -45,7 +45,7 @@ More information: https://github.com/Sina-Soltani/Parbad</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
   </ItemGroup>
 
 </Project>
